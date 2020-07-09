@@ -214,6 +214,17 @@
       "context_set": ""
     },
     {
+      "tag": "userhurt",
+      "patterns": [
+        "why are you mean to me",
+        "why are you like this",
+        "stop being mean",
+        "don't be mean to me"
+      ],
+      "responses": ["I'll do whatever I damn please."],
+      "context_set": ""
+    },
+    {
       "tag": "creator",
       "patterns": [
         "who created you",
