@@ -1,21 +1,21 @@
 import React from "react";
 import ChatMessage from "./ChatMessage";
-
-import "./ChatStream.css";
+import styled from "styled-components";
 
 function ChatStream(props) {
+  console.log(props);
   return (
-    <section className="chat-stream">
-      {props.messageArray.map((msg) => {
-        return (
-          <>
-            <ChatMessage message={msg.user} messageType="sent" />
-            <ChatMessage message={msg.daniel} messageType="received" />
-          </>
-        );
+    <ChatSection>
+      {props.messages.map((msg) => {
+        return <div>{msg}</div>;
       })}
-    </section>
+    </ChatSection>
   );
 }
 
 export default ChatStream;
+
+const ChatSection = styled.section`
+  flex: 1;
+  margin: 5vh 2vw;
+`;
