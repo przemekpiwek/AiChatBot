@@ -1,8 +1,8 @@
+from flask import Flask
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
 nltk.download('punkt')
-
 import numpy
 import tflearn
 import tensorflow
@@ -10,6 +10,8 @@ import random
 import json
 import pickle
 
+
+app = Flask(__name__)
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -94,14 +96,12 @@ def bag_of_words(s, words):
             
     return numpy.array(bag)
 
-def chat():
-    print("Start talking with Daniel (type quit to stop)")
+def chat(question):
     while True:
-        inp = input("You: ")
-        if inp.lower() == "quit":
+        if question.lower() == "quit":
             break
 
-        results = model.predict([bag_of_words(inp,words)])[0]
+        results = model.predict([bag_of_words(question,words)])[0]
         results_index = numpy.argmax(results)
         tag = labels[results_index]
 
@@ -110,8 +110,24 @@ def chat():
                 if tg['tag'] == tag:
                     responses = tg['responses']
 
-            print(random.choice(responses))
+            return random.choice(responses)
         else: 
-            print("I don't quite understand the question. Ask another one.")
+            return("I don't quite understand the question. Ask another one.")
 
-chat()
+conversation = []
+
+@app.route("/")
+def home():
+    return "Hello"
+@app.route("/bruh", methods=["POST"])
+def api():
+    question = "hello"
+    # question = request.form["chatEntry"] # input from input html "name" property
+    danielResponse = chat(question)
+    exchange = {"user":question,"daniel":danielResponse}
+    conversation.append(exchange)
+    return {"messages": conversation}
+        
+
+if __name__ == "__main__":
+    app.run()

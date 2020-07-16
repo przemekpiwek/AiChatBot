@@ -1,0 +1,60 @@
+/*
+  The current user's messages should have:
+  - a text color of #FFF
+  - a background color of #1185f7
+
+  Other participant's messages should have:
+  - a text color of #000
+  - a background color of #e9e9eb
+*/
+
+.chat-message {
+  display: inline-block;
+  color: #000;
+  background-color: #e9e9eb;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: left;
+}
+.chat-image {
+  display: block;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.chat-name {
+  font-weight: 800;
+  font-size: 0.8em;
+  margin-bottom: 5px;
+  display: block;
+}
+.message-wrapper {
+  display: flex;
+  margin-bottom: 20px;
+}
+.image-container {
+  display: flex;
+  align-items: flex-end;
+}
+.sent-message {
+  text-align: right;
+  color: #fff;
+  background-color: #1185f7;
+  padding: 20px;
+  border-radius: 20px;
+}
+.sent-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+.sentTick {
+  position: relative;
+  right: 1%;
+  top: 2.5vh;
+}
+.receivedTick {
+  position: relative;
+  left: 0.5%;
+  top: 3vh;
+}
