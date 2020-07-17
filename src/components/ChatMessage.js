@@ -4,17 +4,13 @@ import SentMessage from "./SentMessage";
 
 const danielSrc = "/assets/danielSrc.png";
 
-const ChatMessage = (props) => {
-  if (props.messageType === "received") {
+const ChatMessage = ({ messageType, message }) => {
+  if (messageType === "received") {
     return (
-      <ReceivedMessage
-        message={props.message}
-        user="daniel"
-        avatar={danielSrc}
-      />
+      <ReceivedMessage message={message} user="daniel" avatar={danielSrc} />
     );
   } else {
-    return <SentMessage message={props.message} />;
+    return <SentMessage message={message} />;
   }
 };
 

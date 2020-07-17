@@ -146,10 +146,8 @@ def test():
 @app.route("/api", methods=['POST'])
 def api():
     question = request.get_json()
-    print("connected")
-    print(question)
     danielResponse = chat(question["value"])
-    response = make_response(jsonify({"user":question,"daniel":danielResponse}), 200)
+    response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
     return response
         
 

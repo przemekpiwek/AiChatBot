@@ -28,16 +28,14 @@ const TextInput = styled.input`
   }
 `;
 
-function Footer(props) {
+function Footer({ messages, setMessages }) {
   const [value, setValue] = useState("");
-
   return (
     <FooterContainer>
       <FooterWrapper>
         <TextInput
           value={value}
           onChange={(e) => {
-            console.log("working");
             setValue(e.target.value);
           }}
           onKeyDown={async (e) => {
@@ -55,8 +53,9 @@ function Footer(props) {
                 },
               });
               const json = await response.json();
-              console.log(json);
-              props.setMessages((prevMessages) => prevMessages.push(json));
+              let newMessageArray = [...messages];
+              newMessageArray.push(json);
+              setMessages(newMessageArray);
             }
           }}
         />

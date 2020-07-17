@@ -7,11 +7,17 @@ const ChatSection = styled.section`
   margin: 5vh 2vw;
 `;
 
-function ChatStream(props) {
+function ChatStream({ messages }) {
+  console.log(messages);
   return (
     <ChatSection>
-      {props.messages.map((msg) => {
-        return <div>{msg}</div>;
+      {messages.map((msg) => {
+        return (
+          <>
+            <ChatMessage messageType="sent" message={msg.user} />
+            <ChatMessage messageType="received" message={msg.daniel} />
+          </>
+        );
       })}
     </ChatSection>
   );
