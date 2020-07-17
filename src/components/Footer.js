@@ -56,6 +56,7 @@ function Footer({ messages, setMessages }) {
               let newMessageArray = [...messages];
               newMessageArray.push(json);
               setMessages(newMessageArray);
+              setValue("");
             }
           }}
         />
