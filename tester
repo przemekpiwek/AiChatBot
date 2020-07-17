@@ -119,6 +119,7 @@ def chat(question):
 
 @app.route("/api", methods=['POST'])
 def api():
+    print("connected")
     question = request.get_json()
     print(question)
     danielResponse = chat(question.value)
@@ -127,4 +128,4 @@ def api():
         
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=4000)
+    app.run(host='localhost', port=3000)

@@ -42,14 +42,16 @@ function Footer(props) {
           }}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
-              const response = await fetch("http://localhost:4000/", {
+              const response = await fetch("/api", {
                 //`${window.origin}/api`
                 method: "POST",
+                mode: "cors",
                 body: JSON.stringify({
                   value: value,
                 }),
                 headers: {
                   "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
                 },
               });
               const json = await response.json();
