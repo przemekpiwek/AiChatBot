@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, jsonify, request, make_response
+from flask_cors import CORS, cross_origin
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
 stemmer = LancasterStemmer()
@@ -10,8 +11,8 @@ import random
 import json
 import pickle
 
-
 app = Flask(__name__)
+CORS(app)
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -114,20 +115,16 @@ def chat(question):
         else: 
             return("I don't quite understand the question. Ask another one.")
 
-conversation = []
 
-@app.route("/")
-def home():
-    return "Hello"
-@app.route("/bruh", methods=["POST"])
+
+@app.route("/api", methods=['POST'])
 def api():
-    question = "hello"
-    # question = request.form["chatEntry"] # input from input html "name" property
-    danielResponse = chat(question)
-    exchange = {"user":question,"daniel":danielResponse}
-    conversation.append(exchange)
-    return {"messages": conversation}
+    question = request.get_json()
+    print(question)
+    danielResponse = chat(question.value)
+    response = make_response(jsonify({"user":question,"daniel":danielResponse}), 200)
+    return response
         
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='localhost', port=4000)

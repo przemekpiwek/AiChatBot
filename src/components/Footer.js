@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const FooterContainer = styled.footer`
@@ -28,21 +28,33 @@ const TextInput = styled.input`
   }
 `;
 
-function Footer() {
+function Footer(props) {
   const [value, setValue] = useState("");
 
   return (
     <FooterContainer>
       <FooterWrapper>
         <TextInput
-          name="chatEntry"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
+          onChange={(e) => {
+            console.log("working");
+            setValue(e.target.value);
+          }}
+          onKeyDown={async (e) => {
             if (e.key === "Enter") {
-              fetch("/bruh", {
+              const response = await fetch("http://localhost:4000/", {
+                //`${window.origin}/api`
                 method: "POST",
+                body: JSON.stringify({
+                  value: value,
+                }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
               });
+              const json = await response.json();
+              console.log(json);
+              props.setMessages((prevMessages) => prevMessages.push(json));
             }
           }}
         />
