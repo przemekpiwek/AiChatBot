@@ -35,7 +35,7 @@ function Modal() {
             }
           }}
         >
-          Press Me
+          Sounds Good.
         </Button>
       </ModalContainer>
     </ModalWrapper>
