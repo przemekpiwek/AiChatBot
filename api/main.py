@@ -12,6 +12,7 @@ import random
 import json
 import pickle
 
+
 app = Flask(__name__)
 CORS(app)
 cors = CORS(app, resources={
@@ -23,6 +24,7 @@ cors = CORS(app, resources={
 with open("intents.json") as file:
     data = json.load(file)
 
+#storing variables in a pickle file in order to shorten compiling time
 try:
     with open("data.pickle", "rb") as f:
         words, labels, training, output = pickle.load(f)
@@ -32,15 +34,20 @@ except:
     docs_x = []
     docs_y = []
 
+#Tokenizing all question words and 1) adding them all to a words array 2) adding groups of words w/ associated tags
+
     for intent in data["intents"]:
         for pattern in intent["patterns"]:
-            wrds = nltk.word_tokenize(pattern)
-            words.extend(wrds)
-            docs_x.append(wrds)
-            docs_y.append(intent["tag"])
+            wrds = nltk.word_tokenize(pattern) 
+            words.extend(wrds) # words = ["Hi", "how", "are", you"]
+            docs_x.append(wrds) # docs_x = [["Hello"],["Hi", "how", "are", "you"]]
+            docs_y.append(intent["tag"]) #doc_y = [["greeting"]]
 
         if intent["tag"] not in labels:
             labels.append(intent["tag"])
+
+#Stemming all question words and pattern words, getting rid of repeats. Created an array of 1 and 0's denoting whether 
+#a stemmed word in current pattern exists in collection of stemmed words. Outputs will denote position of tag in the array a '1'
 
     words = [stemmer.stem(w.lower()) for w in words if w != "?"]
     words = sorted(list(set(words)))
@@ -76,6 +83,9 @@ except:
 
 tensorflow.reset_default_graph()
 
+#Put input as all words. Training model will output array of different values associated with which tag has highest probability.
+#Choose highest probability with threshold of 70% or higher
+
 net = tflearn.input_data(shape=[None,len(training[0])])
 net = tflearn.fully_connected(net,8)
 net = tflearn.fully_connected(net,8)
@@ -102,27 +112,6 @@ def bag_of_words(s, words):
                 bag[i] = 1
             
     return numpy.array(bag)
-
-# def chat():
-#     while True:
-#         inp = input("You: ")
-#         if inp.lower() == "quit":
-#             break
-
-#         results = model.predict([bag_of_words(inp,words)])[0]
-#         results_index = numpy.argmax(results)
-#         tag = labels[results_index]
-
-#         if results[results_index] > 0.7:
-#             for tg in data["intents"]:
-#                 if tg['tag'] == tag:
-#                     responses = tg['responses']
-
-#             print(random.choice(responses))
-#         else: 
-#             return("I don't quite understand the question. Ask another one.")
-
-# chat()
 
 def chat(question):
         results = model.predict([bag_of_words(question,words)])[0]

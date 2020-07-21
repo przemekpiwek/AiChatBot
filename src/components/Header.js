@@ -23,11 +23,11 @@ const AvatarImage = styled.img`
   height: 50px;
   width: 50px;
   border-radius: 50%;
-  margin-bottom: 10px;
+  margin: 10px 0;
 `;
 const AvatarName = styled.h1`
   text-align: center;
-  font-weight: 800;
+  font-weight: 600;
   font-size: 0.8em;
   margin-top: 0;
 `;
@@ -37,7 +37,7 @@ function Header() {
     <HeaderContainer>
       <AvatarWrapper>
         <AvatarImage src={danielSrc} />
-        <AvatarName>Daniel Plainview</AvatarName>
+        <AvatarName>Daniel</AvatarName>
       </AvatarWrapper>
     </HeaderContainer>
   );

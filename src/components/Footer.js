@@ -8,6 +8,7 @@ const FooterContainer = styled.footer`
   left: 0;
   bottom: 0;
   width: 100%;
+  margin-top: 50px;
 `;
 
 const FooterWrapper = styled.div`
@@ -15,12 +16,15 @@ const FooterWrapper = styled.div`
   height: 8vh;
   justify-content: center;
   padding: 10px;
+  margin-bottom: 10px;
 `;
 
 const TextInput = styled.input`
-  width: 90%;
-  border-radius: 10px;
+  width: 80%;
+  border-radius: 50px;
   border: 1px solid rgb(170, 169, 169);
+  text-align: left;
+  padding: 20px;
 
   &:focus {
     outline: 0px;
@@ -34,6 +38,7 @@ function Footer({ messages, setMessages }) {
     <FooterContainer>
       <FooterWrapper>
         <TextInput
+          placeholder="iMessage"
           value={value}
           onChange={(e) => {
             setValue(e.target.value);

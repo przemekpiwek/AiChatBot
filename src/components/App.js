@@ -3,6 +3,7 @@ import Header from "./Header";
 import ChatStream from "./ChatStream";
 import Footer from "./Footer";
 import styled from "styled-components";
+import Modal from "./Modal";
 
 const Wrapper = styled.div`
   font-family: sans-serif;
@@ -15,11 +16,14 @@ function App() {
   const [messages, setMessages] = useState([]);
   console.log(messages);
   return (
-    <Wrapper>
-      <Header />
-      <ChatStream messages={messages} />
-      <Footer messages={messages} setMessages={setMessages} />
-    </Wrapper>
+    <>
+      <Modal />
+      <Wrapper>
+        <Header />
+        <ChatStream messages={messages} />
+        <Footer messages={messages} setMessages={setMessages} />
+      </Wrapper>
+    </>
   );
 }
 
