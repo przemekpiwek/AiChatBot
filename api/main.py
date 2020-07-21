@@ -131,7 +131,7 @@ def chat(question):
 def index():
     return app.send_static_file('index.html')
 
-@app.route("/api", methods=['POST'])
+@app.route("/api/chat", methods=['POST'])
 def api():
     question = request.get_json()
     danielResponse = chat(question["value"])
@@ -139,7 +139,7 @@ def api():
     return response
         
 
-if __name__ == "__main__":
-    app.run(host='localhost', port=5000)
+# if __name__ == "__main__":
+#     app.run(host='localhost', port=5000)
 
 print("mounted server")
