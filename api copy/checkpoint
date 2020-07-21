@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/monikapiwek/Documents/GitHub/AiChatBot/api/model.tflearn"
+all_model_checkpoint_paths: "/Users/monikapiwek/Documents/GitHub/AiChatBot/api/model.tflearn"
