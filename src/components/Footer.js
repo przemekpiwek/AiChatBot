@@ -45,7 +45,7 @@ function Footer({ messages, setMessages }) {
           }}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
-              const response = await fetch("/api", {
+              const response = await fetch("https://aichatbackend.herokuapp.com/api", {
                 //`${window.origin}/api`
                 method: "POST",
                 mode: "cors",
