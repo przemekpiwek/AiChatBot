@@ -45,21 +45,32 @@ function Footer({ messages, setMessages }) {
           }}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {
-              const response = await fetch(
-                "https://aichatbackend.herokuapp.com/api",
-                {
-                  //`${window.origin}/api`
-                  method: "POST",
-                  mode: "cors",
-                  body: JSON.stringify({
-                    value: value,
-                  }),
-                  headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                  },
-                }
-              );
+              let uri = "/api";
+              let h = new Headers();
+              h.append("Accept", "application/json");
+              let req = new Request(uri, {
+                method: "POST",
+                headers: h,
+                mode: "cors",
+                body: JSON.stringify({ value: value }),
+              });
+              const response = await fetch(req);
+
+              // await fetch(
+              //   "https://aichatbackend.herokuapp.com/api",
+              //   {
+              //     method: "POST",
+              //     mode: "cors",
+              //     body: JSON.stringify({
+              //       value: value,
+              //     }),
+              //     headers: {
+              //       "Content-Type": "application/json",
+              //       "Access-Control-Allow-Origin": "*",
+              //     },
+              //   }
+              // );
+
               const json = await response.json();
               let newMessageArray = [...messages];
               newMessageArray.push(json);

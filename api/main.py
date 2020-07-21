@@ -13,7 +13,7 @@ import json
 import pickle
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../build", static_url_path="/")
 CORS(app)
 cors = CORS(app, resources={
     r"/*":{
@@ -127,10 +127,9 @@ def chat(question):
         else: 
             return "I don't quite understand the question. Ask another one." 
 
-@app.route("/test", methods=['GET'])
-def test():
-    print("connected")
-    return {"status": "success"}
+@app.route("/", methods=['GET'])
+def index():
+    return app.send_static_file('index.html')
 
 @app.route("/api", methods=['POST'])
 def api():
