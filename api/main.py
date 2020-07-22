@@ -14,7 +14,7 @@ import pickle
 import os
 
 
-app = Flask(__name__, static_folder="build", static_url_path="/")
+app = Flask(__name__, static_folder='../build', static_url_path='/')
 CORS(app)
 cors = CORS(app, resources={
     r"/*":{
@@ -128,7 +128,7 @@ def chat(question):
         else: 
             return "I don't quite understand the question. Ask another one." 
 
-@app.route("/")
+@app.route('/')
 def index():
     return app.send_static_file('index.html')
 
