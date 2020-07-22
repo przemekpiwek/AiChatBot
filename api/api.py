@@ -21,12 +21,12 @@ cors = CORS(app, resources={
     }
 })
 
-with open("intents.json") as file:
+with open("api/intents.json") as file:
     data = json.load(file)
 
 #storing variables in a pickle file in order to shorten compiling time
 try:
-    with open("data.pickle", "rb") as f:
+    with open("api/data.pickle", "rb") as f:
         words, labels, training, output = pickle.load(f)
 except:
     words = []
@@ -78,7 +78,7 @@ except:
     training = numpy.array(training)
     output = numpy.array(output)
 
-    with open("data.pickle", "wb") as f:
+    with open("api/data.pickle", "wb") as f:
         pickle.dump((words, labels, training, output),f)
 
 tensorflow.reset_default_graph()
@@ -95,10 +95,10 @@ net = tflearn.regression(net)
 model = tflearn.DNN(net)  
 
 try:
-    model.load("model.tflearn")
+    model.load("api/model.tflearn")
 except:
     model.fit(training,output, n_epoch=1500, batch_size=8, show_metric=True)
-    model.save("model.tflearn")
+    model.save("api/model.tflearn")
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
@@ -127,19 +127,23 @@ def chat(question):
         else: 
             return "I don't quite understand the question. Ask another one." 
 
-@app.route("/", methods=['GET'])
+@app.route("/")
 def index():
     return app.send_static_file('index.html')
 
-@app.route("/api/chat", methods=['POST'])
+@app.route("/test")
+def hello(request):
+  return JsonResponse({'response_text':'hello world!'})
+
+@app.route("/api/chat", methods=["POST"])
 def api():
     question = request.get_json()
     danielResponse = chat(question["value"])
     response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
     return response
         
-
-# if __name__ == "__main__":
-#     app.run(host='localhost', port=5000)
+# app.run()
+if __name__ == "__main__":
+    app.run(host='0.0.0.0',port=5000)
 
 print("mounted server")
