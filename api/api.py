@@ -131,18 +131,17 @@ def chat(question):
 def index():
     return app.send_static_file('index.html')
 
-# @app.route("/test")
-# def hello(request):
-#   return JsonResponse({'response_text':'hello world!'})
+@app.route("/test")
+def hello(request):
+  return JsonResponse({'response_text':'hello world!'})
 
-# @app.route("/api/chat", methods=["POST"])
-# def api():
-#     question = request.get_json()
-#     danielResponse = chat(question["value"])
-#     response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
-#     return response
+@app.route("/api/chat", methods=["POST"])
+def api():
+    question = request.get_json()
+    danielResponse = chat(question["value"])
+    response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
+    return response
         
-# app.run()
 if __name__ == "__main__":
     app.run()
 
