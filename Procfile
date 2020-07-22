@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath api -b :5000 api:app
+web: gunicorn --pythonpath api api:app
