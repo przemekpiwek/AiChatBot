@@ -1,2 +1,2 @@
-web: cd api && gunicorn -b :4000 api:app
+web: cd api && gunicorn api:app
 
