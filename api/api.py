@@ -11,6 +11,7 @@ import tensorflow
 import random
 import json
 import pickle
+import os
 
 
 app = Flask(__name__, static_folder="../build", static_url_path="/")
@@ -132,18 +133,18 @@ def index():
     return app.send_static_file('index.html')
 
 @app.route("/test")
-def hello(request):
+def hello():
   return JsonResponse({'response_text':'hello world!'})
 
 @app.route("/api/chat", methods=["POST"])
-def api():
+def api(request):
     question = request.get_json()
     danielResponse = chat(question["value"])
     response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
     return response
         
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
 print("mounted server")
