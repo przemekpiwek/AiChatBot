@@ -132,10 +132,6 @@ def chat(question):
 def index():
     return app.send_static_file('index.html')
 
-@app.route("/test")
-def hello():
-  return JsonResponse({'response_text':'hello world!'})
-
 @app.route("/api/chat", methods=["POST"])
 def api():
     question = request.get_json()
