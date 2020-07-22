@@ -1,2 +1,2 @@
-web: cd api && python api.py
+web: cd api && gunicorn api:app
 
