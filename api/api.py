@@ -137,7 +137,7 @@ def hello():
   return JsonResponse({'response_text':'hello world!'})
 
 @app.route("/api/chat", methods=["POST"])
-def api(request):
+def api():
     question = request.get_json()
     danielResponse = chat(question["value"])
     response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
