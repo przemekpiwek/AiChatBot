@@ -1,19 +1,20 @@
 import React from "react";
 import "./ChatMessage.css";
 
-// import ReceivedTick from "../public/assets/tip-received.svg";
+import ReceivedTick from "./tip-received.svg";
+import danielSrc from "./danielSrc.png";
 
-const ReceivedMessage = (props) => {
+const ReceivedMessage = ({ user, message }) => {
   return (
     <div>
       <div className="message-wrapper">
         <div className="image-container">
-          <img className="chat-image" src={props.avatar} alt="" />
+          <img className="chat-image" alt="" src={danielSrc} />
         </div>
-        <img className="receivedTick" alt="" />
+        <img className="receivedTick" alt="" src={ReceivedTick} />
         <div>
-          <span className="chat-name">{props.user}</span>
-          <div className="chat-message">{props.message}</div>
+          <span className="chat-name">{user}</span>
+          <div className="chat-message">{message}</div>
         </div>
       </div>
     </div>

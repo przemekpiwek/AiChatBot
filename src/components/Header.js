@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import danielSrc from "../assets/danielSrc.png";
+import danielSrc from "./danielSrc.png";
 
 const HeaderContainer = styled.header`
   height: 100px;
