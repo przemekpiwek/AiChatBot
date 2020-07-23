@@ -131,22 +131,11 @@ def chat(question):
 
 @app.route('/')
 def index():
-    return "Hello, welcome"
+    return app.send_static_file('index.html')
 
 @app.route('/test')
 def hello():
     return {"status": "success"}
-
-@app.route('/yo')
-def yo():
-    return app.send_static_file('index.html')
-
-@app.route('/yo2')
-def yo2():
-    root_dir = os.path.dirname(os.getcwd())
-    path_to_static = os.path.join(root_dir,"api","static","build")
-    return path_to_static
-
 
 @app.route("/api/chat", methods=["POST"])
 def api():

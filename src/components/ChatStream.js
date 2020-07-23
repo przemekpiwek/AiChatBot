@@ -8,7 +8,6 @@ const ChatSection = styled.section`
 `;
 
 function ChatStream({ messages }) {
-  console.log(messages);
   return (
     <ChatSection>
       {messages.map((msg) => {

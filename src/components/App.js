@@ -14,7 +14,6 @@ const Wrapper = styled.div`
 
 function App() {
   const [messages, setMessages] = useState([]);
-  console.log(messages);
   return (
     <>
       <Modal />
