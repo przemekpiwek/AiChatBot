@@ -1,5 +1,5 @@
 import time
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, send_from_directory
 from flask_cors import CORS
 import nltk
 from nltk.stem.lancaster import LancasterStemmer
@@ -14,7 +14,12 @@ import pickle
 import os
 
 
-app = Flask(__name__, static_folder='../build', static_url_path='/')
+root_dir = os.path.dirname(os.getcwd())
+path_to_static = os.path.join(root_dir,"build")
+
+
+app = Flask(__name__, static_folder=path_to_static, static_url_path='/')
+
 CORS(app)
 
 with open("intents.json") as file:
@@ -127,6 +132,16 @@ def chat(question):
 def index():
     return app.send_static_file('index.html')
     print(app.config)
+
+@app.route('/test')
+def hello():
+    return {"status": "success"}
+
+@app.route('/yo')
+def yo():
+    root_dir = os.path.dirname(os.getcwd())
+    path_to_static = os.path.join(root_dir,"build")
+    return path_to_static
 
 
 @app.route("/api/chat", methods=["POST"])
