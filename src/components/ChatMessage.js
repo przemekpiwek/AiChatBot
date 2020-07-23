@@ -2,7 +2,7 @@ import React from "react";
 import ReceivedMessage from "./ReceivedMessage";
 import SentMessage from "./SentMessage";
 
-const danielSrc = "../public/assets/danielSrc.png";
+import danielSrc from "../assets/danielSrc.png";
 
 const ChatMessage = ({ messageType, message }) => {
   if (messageType === "received") {
