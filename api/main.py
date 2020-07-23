@@ -14,11 +14,12 @@ import pickle
 import os
 
 
-root_dir = os.path.dirname(os.getcwd())
-path_to_static = os.path.join(root_dir,"build")
+# root_dir = os.path.dirname(os.getcwd())
+# path_to_static = os.path.join(root_dir,"build")
 
 
-app = Flask(__name__, static_folder=path_to_static, static_url_path='/')
+app = Flask(__name__)
+# static_folder="/", static_url_path='/'
 
 CORS(app)
 
@@ -130,8 +131,7 @@ def chat(question):
 
 @app.route('/')
 def index():
-    return app.send_static_file('index.html')
-    print(app.config)
+    return "Hello, welcome"
 
 @app.route('/test')
 def hello():
@@ -139,8 +139,12 @@ def hello():
 
 @app.route('/yo')
 def yo():
+    return app.send_static_file('index.html')
+
+@app.route('/yo2')
+def yo2():
     root_dir = os.path.dirname(os.getcwd())
-    path_to_static = os.path.join(root_dir,"build")
+    path_to_static = os.path.join(root_dir,"api","static","build")
     return path_to_static
 
 
