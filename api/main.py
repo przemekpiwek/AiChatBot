@@ -16,11 +16,6 @@ import os
 
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 CORS(app)
-cors = CORS(app, resources={
-    r"/*":{
-        "origins": "*"
-    }
-})
 
 with open("intents.json") as file:
     data = json.load(file)
@@ -131,6 +126,7 @@ def chat(question):
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+    print(app.config)
 
 
 @app.route("/api/chat", methods=["POST"])
@@ -140,9 +136,9 @@ def api():
     response = make_response(jsonify({"user":question["value"],"daniel":danielResponse}), 200)
     return response
         
-
-port = int(os.environ.get("PORT", 5000))
-app.run(host='0.0.0.0', port=port)
-print("mounted server")
+if __name__ == "__main__": 
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+    print("mounted server")
 
 
