@@ -132,6 +132,7 @@ def chat(question):
 def index():
     return app.send_static_file('index.html')
 
+
 @app.route("/api/chat", methods=["POST"])
 def api():
     question = request.get_json()
@@ -142,5 +143,6 @@ def api():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+    print("mounted server")
 
-print("mounted server")
+
