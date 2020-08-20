@@ -7,20 +7,13 @@ stemmer = LancasterStemmer()
 nltk.download('punkt')
 import numpy
 import tflearn
-import tensorflow
+import tensorflow as tf
 import random
 import json
 import pickle
 import os
 
-
-# root_dir = os.path.dirname(os.getcwd())
-# path_to_static = os.path.join(root_dir,"build")
-
-
 app = Flask(__name__)
-# static_folder="/", static_url_path='/'
-
 CORS(app)
 
 with open("intents.json") as file:
@@ -29,64 +22,65 @@ with open("intents.json") as file:
 #storing variables in a pickle file in order to shorten compiling time
 try:
     with open("data.pickle", "rb") as f:
-        words, labels, training, output = pickle.load(f)
+        all_words, tags, training, output = pickle.load(f)
 except:
-    words = []
-    labels = []
-    docs_x = []
-    docs_y = []
+    all_words = []
+    tags = []
+    group = []
+    group_tag = []
 
-#Tokenizing all question words and 1) adding them all to a words array 2) adding groups of words w/ associated tags
+# Set up double for loop. We do two things:
+# -	We tokenize all questions and add them to a list called words (collects all question words)
+# -	We take all the tokenized question words, add group them in a list, group, and the corresponding “type” of questions in group_tag
 
     for intent in data["intents"]:
         for pattern in intent["patterns"]:
-            wrds = nltk.word_tokenize(pattern) 
-            words.extend(wrds) # words = ["Hi", "how", "are", you"]
-            docs_x.append(wrds) # docs_x = [["Hello"],["Hi", "how", "are", "you"]]
-            docs_y.append(intent["tag"]) #doc_y = [["greeting"]]
+            question_words = nltk.word_tokenize(pattern) 
+            all_words.extend(question_words) 
+            group.append(question_words) 
+            group_tag.append(intent["tag"]) 
 
-        if intent["tag"] not in labels:
-            labels.append(intent["tag"])
+        if intent["tag"] not in tags:
+            tags.append(intent["tag"])
 
-#Stemming all question words and pattern words, getting rid of repeats. Created an array of 1 and 0's denoting whether 
-#a stemmed word in current pattern exists in collection of stemmed words. Outputs will denote position of tag in the array a '1'
+#For every group of question words, a list with length of all_words is created with values of "1" or "0" depending on if the stemmed
+#question word exists in the all_words list or not. A corresponding list denoting the "tag" of the word in created. Now, we
+#have a list of lists that show if user inputs with those words exist(input to our model), it will correlate to a certain "tag"(output training model). 
+#The length of our model input will be the total number of questions for each "tag" in our intents file. 
 
-    words = [stemmer.stem(w.lower()) for w in words if w != "?"]
-    words = sorted(list(set(words)))
+    all_words = [stemmer.stem(w.lower()) for w in words if w != "?"]
+    all_words = sorted(list(set(words)))
 
-    labels = sorted(labels)
+    tags = sorted(tags)
 
     training = []
     output =[]
-    out_empty = [0 for _ in range(len(labels))]
+    out_empty = [0 for _ in range(len(tags))]
 
-    for x, doc in enumerate(docs_x):
-        bag = []
+    for x, words in enumerate(group):
+        binary = []
 
-        wrds = [stemmer.stem(w) for w in doc]
+        question_words = [stemmer.stem(w) for w in words]
 
-        for w in words:
-            if w in wrds:
-                bag.append(1)
+        for w in all_words:
+            if w in question_words:
+                binary.append(1)
             else:
-                bag.append(0)
+                binary.append(0)
 
         output_row = out_empty[:]
-        output_row[labels.index(docs_y[x])] = 1
+        output_row[tags.index(group_tag[x])] = 1
 
-        training.append(bag)
+        training.append(binary)
         output.append(output_row)
 
     training = numpy.array(training)
     output = numpy.array(output)
 
     with open("data.pickle", "wb") as f:
-        pickle.dump((words, labels, training, output),f)
+        pickle.dump((all_words, tags, training, output),f)
 
-tensorflow.reset_default_graph()
-
-#Put input as all words. Training model will output array of different values associated with which tag has highest probability.
-#Choose highest probability with threshold of 70% or higher
+tf.reset_default_graph()
 
 net = tflearn.input_data(shape=[None,len(training[0])])
 net = tflearn.fully_connected(net,8)
@@ -102,23 +96,27 @@ except:
     model.fit(training,output, n_epoch=1500, batch_size=8, show_metric=True)
     model.save("model.tflearn")
 
-def bag_of_words(s, words):
-    bag = [0 for _ in range(len(words))]
 
-    s_words = nltk.word_tokenize(s)
-    s_words = [stemmer.stem(word.lower()) for word in s_words]
+#Training model will output array of different values with probability of which tag input is most likely associated with input.
+#Chooses highest probability with threshold of 70% or higher
 
-    for se in s_words:
+def binary_of_words(input, words):
+    binary = [0 for _ in range(len(words))]
+
+    input_words = nltk.word_tokenize(input)
+    input_words = [stemmer.stem(word.lower()) for word in input_words]
+
+    for word in input_words:
         for i,w in enumerate(words):
-            if w == se:
-                bag[i] = 1
+            if w == word:
+                binary[i] = 1
             
-    return numpy.array(bag)
+    return numpy.array(binary)
 
 def chat(question):
-        results = model.predict([bag_of_words(question,words)])[0]
+        results = model.predict([binary_of_words(question,words)])[0]
         results_index = numpy.argmax(results)
-        tag = labels[results_index]
+        tag = tags[results_index]
 
         if results[results_index] > 0.7:
             for tg in data["intents"]:
